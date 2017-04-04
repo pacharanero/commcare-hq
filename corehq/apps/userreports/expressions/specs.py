@@ -1,4 +1,7 @@
 from __future__ import absolute_import
+import csv
+from datetime import datetime
+
 from jsonobject.base_properties import DefaultProperty
 from simpleeval import InvalidExpression
 import six
@@ -17,6 +20,27 @@ from corehq.form_processor.interfaces.processor import FormProcessorInterface
 from dimagi.ext.jsonobject import JsonObject, StringProperty, ListProperty, DictProperty
 from pillowtop.dao.exceptions import DocumentNotFoundError
 from .utils import eval_statements
+
+writer = csv.writer(open('ucr-expression-test.csv', 'w'))
+
+
+def timeit(method):
+    def timed(*args, **kw):
+        ts = datetime.now()
+        result = method(*args, **kw)
+        te = datetime.now()
+        seconds = (te - ts).total_seconds()
+        # if seconds > 0.01:
+        expression = args[0]
+        name = expression.name
+        # try:
+        #     name = indicator.column.id
+        # except:
+        #     name = ' - '.join([i.id for i in indicator.get_columns()])
+
+        writer.writerow([name, method.__name__, args, kw, seconds])
+        return result
+    return timed
 
 
 class IdentityExpressionSpec(JsonObject):
@@ -79,6 +103,7 @@ class NamedExpressionSpec(JsonObject):
             raise BadSpecError(u'Name {} not found in list of named expressions!'.format(self.name))
         self._context = context
 
+    @timeit
     def __call__(self, item, context=None):
         return self._context.named_expressions[self.name](item, context)
 
