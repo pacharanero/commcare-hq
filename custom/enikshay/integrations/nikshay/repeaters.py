@@ -2,6 +2,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.urls import reverse
 
 from corehq.apps.repeaters.models import CaseRepeater
+from corehq.apps.repeaters.const import SOAP
 from corehq.form_processor.models import CommCareCaseSQL
 from corehq.toggles import NIKSHAY_INTEGRATION
 from casexml.apps.case.xml.parser import CaseUpdateAction
@@ -184,6 +185,28 @@ class NikshayFollowupRepeater(BaseNikshayRepeater):
             )
         else:
             return False
+
+
+class NikshayPrivateNotifyPatientsRepeater(CaseRepeater):
+    method = SOAP
+    operation = 'InsertHFIDPatient_UATBC'
+    white_listed_case_types = ['episode']
+
+    class Meta(object):
+        app_label = 'repeaters'
+
+    def allowed_to_forward(self, episode_case):
+        allowed_case_types_and_users = self._allowed_case_type(episode_case) and self._allowed_user(episode_case)
+        if not allowed_case_types_and_users:
+            return False
+
+        episode_case_properties = episode_case.dynamic_case_properties()
+        return (
+            episode_case_properties.get("episode_pending_registration", 'true') == 'false'
+            and episode_case_properties.get("nikshay_id")
+            and episode_case_properties.get("nikshay_registered", "true") == "false"
+            and case_properties_changed(episode_case, ["episode_pending_registration"])
+        )
 
 
 def person_hiv_status_changed(case):

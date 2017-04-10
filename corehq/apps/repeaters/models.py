@@ -4,6 +4,8 @@ import logging
 import urllib
 import urlparse
 from django.utils.translation import ugettext_lazy as _
+from zeep import Client
+from zeep.exceptions import XMLSyntaxError, Fault, TransportError
 
 from requests.exceptions import Timeout, ConnectionError
 from corehq.apps.cachehq.mixins import QuickCachedDocumentMixin
@@ -42,6 +44,8 @@ from .const import (
     RECORD_PENDING_STATE,
     RECORD_CANCELLED_STATE,
     POST_TIMEOUT,
+    POST,
+    SOAP,
 )
 from .exceptions import RequestConnectionError
 from .utils import get_all_repeater_types
@@ -140,6 +144,8 @@ class Repeater(QuickCachedDocumentMixin, Document, UnicodeMixIn):
     """
     Represents the configuration of a repeater. Will specify the URL to forward to and
     other properties of the configuration.
+
+    If the method is SOAP, then the URL should be a link to the WSDL file and operation should be the name of the operation to send data too.
     """
     base_doc = 'Repeater'
 
@@ -151,6 +157,12 @@ class Repeater(QuickCachedDocumentMixin, Document, UnicodeMixIn):
     username = StringProperty()
     password = StringProperty()
     friendly_name = _("Data")
+
+    method = StringProperty(
+        choices=[POST, SOAP],
+        default=POST
+    )
+    operation = StringProperty()
 
     @classmethod
     def get_custom_url(cls, domain):
@@ -314,6 +326,7 @@ class Repeater(QuickCachedDocumentMixin, Document, UnicodeMixIn):
         """
         generator = self.get_payload_generator(self.format_or_default_format())
         return generator.handle_exception(exception, repeat_record)
+
 
 
 class FormRepeater(Repeater):
@@ -560,17 +573,26 @@ class RepeatRecord(Document):
     def post(self, post_info, tries=0):
         tries += 1
         try:
-            response = simple_post_with_cached_timeout(
-                post_info.payload,
-                self.url,
-                headers=post_info.headers,
-                force_send=post_info.force_send,
-                timeout=POST_TIMEOUT,
-            )
+            if self.repeater.method == SOAP:
+                response = self.perform_soap_operation(post_info, tries=tries)
+                return self.handle_success(response)  # soap operations always throw exceptions when they fail
+            else:
+                response = simple_post_with_cached_timeout(
+                    post_info.payload,
+                    self.url,
+                    headers=post_info.headers,
+                    force_send=post_info.force_send,
+                    timeout=POST_TIMEOUT,
+                )
+                return self.handle_response(response, post_info, tries)
         except Exception as e:
             self.handle_exception(e)
-        else:
-            return self.handle_response(response, post_info, tries)
+
+    def perform_soap_operation(self, post_info, tries=0):
+        client = Client(self.url)
+        return client.service[self.repeater.operation](
+            **post_info.payload
+        )
 
     def handle_response(self, response, post_info, tries):
         if 200 <= response.status_code < 300:

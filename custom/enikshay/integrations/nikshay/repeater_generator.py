@@ -28,6 +28,7 @@ from custom.enikshay.integrations.nikshay.repeaters import (
     NikshayHIVTestRepeater,
     NikshayTreatmentOutcomeRepeater,
     NikshayFollowupRepeater,
+    NikshayPrivateNotifyPatientsRepeater,
 )
 from custom.enikshay.integrations.nikshay.exceptions import NikshayResponseException
 from custom.enikshay.exceptions import NikshayLocationNotFound, NikshayRequiredValueMissing
@@ -439,6 +440,36 @@ def _get_episode_case_properties(episode_case_properties):
     })
 
     return episode_properties
+
+
+@RegisterGenerator(NikshayPrivateNotifyPatientsRepeater, 'case_json', 'SOAP', is_default=True)
+class NikshayPrivateNotifyPatientsPayloadGenerator(BaseNikshayPayloadGenerator):
+    """Returns dict that can be consumed by zeep methods
+    """
+    def get_payload(self, repeat_record, episode_case):
+        return {
+            "Stocode": "",
+            "Dtocode": "",
+            "TBUcode": "",
+            "HFIDNO": "",
+            "pname": "",
+            "fhname": "",
+            "age": "",
+            "gender": "",
+            "Address": "",
+            "pin": "",
+            "lno": "",
+            "mno": "",
+            "tbdiagdate": "",
+            "tbstdate": "",
+            "Type": "",
+            "B_diagnosis": "",
+            "D_SUSTest": "",
+            "Treat_I": "",
+            "usersid": "",
+            "password": "",
+            "source": "8",
+        }
 
 
 def _save_error_message(domain, case_id, error, reg_field="nikshay_registered", error_field="nikshay_error"):
