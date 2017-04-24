@@ -59,7 +59,6 @@ from corehq.apps.accounting.models import (
     SoftwarePlanEdition,
     SoftwarePlanVersion,
     SoftwarePlanVisibility,
-    SoftwareProduct,
     SoftwareProductRate,
     SoftwareProductType,
     Subscription,
@@ -609,14 +608,8 @@ class SubscriptionForm(forms.Form):
         # product type is now always commcare, but need to support old subscriptions
         is_existing = self.subscription is not None
         if is_existing:
-            try:
-                plan_product = self.subscription.plan_version.product_rate.product.product_type
-                self.fields['plan_product'].initial = plan_product
-            except (IndexError, SoftwarePlanVersion.DoesNotExist):
-                plan_product = (
-                    '<i class="fa fa-exclamation-triangle"></i> No Product Exists for '
-                    'the Plan (update required)'
-                )
+            plan_product = SoftwareProductType.COMMCARE
+            self.fields['plan_product'].initial = plan_product
             return hqcrispy.B3TextField(
                 'plan_product',
                 plan_product,
@@ -1328,7 +1321,7 @@ class SoftwarePlanVersionForm(forms.Form):
             'currentValue': self['product_rates'].value(),
             'handlerSlug': SoftwareProductRateAsyncHandler.slug,
             'select2Options': {
-                'fieldName': 'product_id',
+                'fieldName': 'product_id', # ?
             }
         }
 
@@ -1362,7 +1355,7 @@ class SoftwarePlanVersionForm(forms.Form):
         if self.plan_version is not None:
             product_rate = self.plan_version.product_rate
             return {
-                product_rate.product.id: product_rate
+                product_rate.product.id: product_rate # todo
             }
         else:
             return {}
@@ -1477,7 +1470,7 @@ class SoftwarePlanVersionForm(forms.Form):
             self._errors.setdefault('product_rates', errors)
 
         available_types = list(dict(SoftwareProductType.CHOICES).keys())
-        product_types = [r.product.product_type for r in rate_instances]
+        product_types = [r.product.product_type for r in rate_instances] #
         if any([product_types.count(p) > 1 for p in available_types]):
             raise ValidationError(_(
                 "You may have at most ONE rate per product type "
@@ -1655,7 +1648,7 @@ class ProductRateForm(forms.ModelForm):
 
     def get_instance(self, product):
         instance = self.save(commit=False)
-        instance.product = product
+        instance.product = product #
         return instance
 
 

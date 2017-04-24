@@ -1,8 +1,16 @@
 from __future__ import absolute_import
 import json
 from django.db.models import Q
-from corehq.apps.accounting.models import Feature, SoftwareProduct, BillingAccount, SoftwarePlanVersion, \
-    Subscription, Subscriber, BillingContactInfo, SoftwarePlan
+from corehq.apps.accounting.models import (
+    BillingAccount,
+    BillingContactInfo,
+    Feature,
+    SoftwarePlan,
+    SoftwarePlanVersion,
+    SoftwareProductRate,
+    Subscriber,
+    Subscription,
+)
 from corehq.apps.accounting.utils import fmt_feature_rate_dict, fmt_product_rate_dict
 from corehq.apps.domain.models import Domain
 from corehq.apps.hqwebapp.async_handler import BaseAsyncHandler, AsyncHandlerError
@@ -67,22 +75,18 @@ class SoftwareProductRateAsyncHandler(BaseRateAsyncHandler):
 
     @property
     def create_response(self):
-        if SoftwareProduct.objects.filter(name=self.name).count() > 0:
-            raise AsyncHandlerError("Product '%s' already exists, and likely already "
+        if SoftwareProductRate.objects.filter(name=self.name).exists():
+            raise AsyncHandlerError("Product rate '%s' already exists, and likely already "
                                     "in this Software Plan Version." % self.name)
-        new_product, _ = SoftwareProduct.objects.get_or_create(
-            name=self.name,
-            product_type=self.rate_type
-        )
-        return fmt_product_rate_dict(new_product)
+        return fmt_product_rate_dict(self.name)
 
     @property
     def apply_response(self):
         try:
-            product = SoftwareProduct.objects.get(id=self.rate_id)
-            return fmt_product_rate_dict(product)
-        except SoftwareProduct.DoesNotExist:
-            raise AsyncHandlerError("could not find an existing product")
+            product_rate = SoftwareProductRate.objects.get(id=self.rate_id)
+            return fmt_product_rate_dict(product_rate.name)
+        except SoftwareProductRate.DoesNotExist:
+            raise AsyncHandlerError("could not find an existing product rate")
 
 
 class BaseSelect2AsyncHandler(BaseAsyncHandler):

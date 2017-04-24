@@ -213,27 +213,35 @@ def generate_invoices(based_on_date=None):
             invoice_factory = DomainInvoiceFactory(
                 invoice_start, invoice_end, domain)
             invoice_factory.create_invoices()
+
             log_accounting_info("Sent invoices for domain %s" % domain.name)
+            print 'invoices created'
         except CreditLineError as e:
+            print 1
             log_accounting_error(
                 "There was an error utilizing credits for "
                 "domain %s: %s" % (domain.name, e),
                 show_stack_trace=True,
             )
         except InvoiceError as e:
+            print 2
             log_accounting_error(
                 "Could not create invoice for domain %s: %s" % (domain.name, e),
                 show_stack_trace=True,
             )
-        except Exception as e:
-            log_accounting_error(
-                "Error occurred while creating invoice for "
-                "domain %s: %s" % (domain.name, e),
-                show_stack_trace=True,
-            )
+        # except Exception as e:
+        #     print 3
+        #     print e.message
+        #     log_accounting_error(
+        #         "Error occurred while creating invoice for "
+        #         "domain %s: %s" % (domain.name, e),
+        #         show_stack_trace=True,
+        #     )
 
     if not settings.UNIT_TESTING:
         _invoicing_complete_soft_assert(False, "Invoicing is complete!")
+
+    print 'exiting generate_invoices'
 
 
 def send_bookkeeper_email(month=None, year=None, emails=None):

@@ -58,6 +58,7 @@ class DomainInvoiceFactory(object):
 
     def create_invoices(self):
         subscriptions = self._get_subscriptions()
+        print subscriptions
         self._ensure_full_coverage(subscriptions)
         for subscription in subscriptions:
             try:
@@ -67,6 +68,7 @@ class DomainInvoiceFactory(object):
                     "Invoice already existed for domain %s: %s" % (self.domain.name, e),
                     show_stack_trace=True,
                 )
+        print 'exiting create_invoices'
 
     def _get_subscriptions(self):
         subscriptions = Subscription.objects.filter(
@@ -154,6 +156,8 @@ class DomainInvoiceFactory(object):
 
         with transaction.atomic():
             invoice = self._generate_invoice(subscription, invoice_start, invoice_end)
+            print 'INVOICE'
+            print invoice
             record = BillingRecord.generate_record(invoice)
         if record.should_send_email:
             try:
@@ -197,6 +201,7 @@ class DomainInvoiceFactory(object):
             return community_ranges
 
     def _generate_invoice(self, subscription, invoice_start, invoice_end):
+        print 'in _generate_invoice'
         invoice, is_new_invoice = Invoice.objects.get_or_create(
             subscription=subscription,
             date_start=invoice_start,

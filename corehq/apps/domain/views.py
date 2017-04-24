@@ -763,7 +763,7 @@ class DomainSubscriptionView(DomainAccountingSettings):
 
     def get_product_summary(self, plan_version, account, subscription):
         product_rate = plan_version.product_rate
-        product_type = product_rate.product.product_type
+        product_type = SoftwareProductType.COMMCARE
         return {
             'name': product_type,
             'monthly_fee': _("USD %s /month") % product_rate.monthly_fee,

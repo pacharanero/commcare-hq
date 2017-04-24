@@ -62,16 +62,18 @@ def fmt_feature_rate_dict(feature, feature_rate=None):
     }
 
 
-def fmt_product_rate_dict(product, product_rate=None):
+def fmt_product_rate_dict(product_name, product_rate=None):
     """
-    This will be turned into a JSON representation of this SoftwareProduct and its SoftwareProductRate
+    This will be turned into a JSON representation of this SoftwareProductRate
     """
+    from corehq.apps.accounting.models import SoftwareProductRate
     if product_rate is None:
-        product_rate = product.get_rate()
+        product_rate = SoftwareProductRate.objects.filter(
+            is_active=True,
+            name=product_name,
+        ).latest('date_created')
     return {
-        'name': product.name,
-        'product_type': product.product_type,
-        'product_id': product.id,
+        'name': product_name,
         'rate_id': product_rate.id,
         'monthly_fee': product_rate.monthly_fee.__str__(),
     }
