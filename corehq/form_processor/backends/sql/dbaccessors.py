@@ -53,6 +53,7 @@ from corehq.form_processor.utils.sql import (
 from corehq.sql_db.config import get_sql_db_aliases_in_use, partition_config
 from corehq.sql_db.routers import db_for_read_write
 from corehq.util.queries import fast_distinct_in_domain
+from corehq.util.soft_assert.api import soft_assert
 from corehq.util.test_utils import unit_testing_only
 from dimagi.utils.chunked import chunked
 
@@ -557,6 +558,9 @@ class FormAccessorSQL(AbstractFormAccessor):
 
     @staticmethod
     def get_form_ids_in_domain_by_state(domain, state):
+        soft_assert('{}@{}'.format('skelly', 'dimagi.com')).call(
+            False, 'get_form_ids_in_domain_by_type called'
+        )
         with get_cursor(XFormInstanceSQL) as cursor:
             cursor.execute(
                 'SELECT form_id from get_form_ids_in_domain_by_type(%s, %s)',
@@ -857,6 +861,9 @@ class CaseAccessorSQL(AbstractCaseAccessor):
 
     @staticmethod
     def _get_case_ids_in_domain(domain, case_type=None, owner_ids=None, is_closed=None, deleted=False):
+        soft_assert('{}@{}'.format('skelly', 'dimagi.com')).call(
+            owner_ids, 'get_case_ids_in_domain called withouth owner_ids'
+        )
         owner_ids = list(owner_ids) if owner_ids else None
         with get_cursor(CommCareCaseSQL) as cursor:
             cursor.execute(
