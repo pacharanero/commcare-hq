@@ -371,7 +371,8 @@ HQ_APPS = (
     'custom.icds',
     'custom.icds_reports',
     'custom.pnlppgi',
-    'custom.hki'
+    'custom.hki',
+    'custom.infomovel_fgh.openmrs',
 )
 
 ENIKSHAY_APPS = (
@@ -1734,6 +1735,7 @@ ENIKSHAY_REPEATERS = (
     'custom.enikshay.integrations.bets.repeaters.BETSDiagnosisAndNotificationRepeater',
     'custom.enikshay.integrations.bets.repeaters.BETSAYUSHReferralRepeater',
 
+    'custom.infomovel_fgh.openmrs.repeaters.RegisterOpenmrsPatientRepeater',
 )
 
 REPEATERS = BASE_REPEATERS + LOCAL_REPEATERS + ENIKSHAY_REPEATERS
