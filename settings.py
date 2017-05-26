@@ -1735,7 +1735,7 @@ ENIKSHAY_REPEATERS = (
     'custom.enikshay.integrations.bets.repeaters.BETSDiagnosisAndNotificationRepeater',
     'custom.enikshay.integrations.bets.repeaters.BETSAYUSHReferralRepeater',
 
-    'custom.infomovel_fgh.openmrs.repeaters.RegisterOpenmrsPatientRepeater',
+    'custom.infomovel_fgh.openmrs.repeaters.OpenmrsRepeater',
 )
 
 REPEATERS = BASE_REPEATERS + LOCAL_REPEATERS + ENIKSHAY_REPEATERS
