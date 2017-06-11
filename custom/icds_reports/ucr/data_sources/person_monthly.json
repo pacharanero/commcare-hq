@@ -1,0 +1,741 @@
+{
+  "domains": [
+    "icds-sql",
+    "icds-test",
+    "icds-cas",
+    "icds-cas-sandbox"
+  ],
+  "server_environment": [
+    "softlayer",
+    "icds"
+  ],
+  "config": {
+    "table_id": "static-person_cases_monthly",
+    "display_name": "Cases - Person (Monthly) (Static)",
+    "referenced_doc_type": "CommCareCase",
+    "description": "",
+    "base_item_expression": {
+      "test": {},
+      "expressions": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "type": "iterator"
+    },
+    "configured_filter": {
+      "type": "and",
+      "filters": [
+        {
+          "operator": "eq",
+          "type": "boolean_expression",
+          "expression": {
+            "datatype": null,
+            "type": "property_name",
+            "property_name": "type"
+          },
+          "property_value": "person"
+        }
+      ]
+    },
+    "configured_indicators": [
+      {
+        "column_id": "month",
+        "datatype": "date",
+        "display_name": null,
+        "expression": {
+          "type": "icds_month_start"
+        },
+        "is_nullable": false,
+        "is_primary_key": false,
+        "create_index": true,
+        "transform": {},
+        "type": "expression"
+      },
+      {
+        "column_id": "case_id",
+        "datatype": "string",
+        "display_name": null,
+        "expression": {
+          "expression": {
+            "datatype": null,
+            "property_name": "_id",
+            "type": "property_name"
+          },
+          "type": "root_doc"
+        },
+        "is_nullable": false,
+        "is_primary_key": false,
+        "transform": {},
+        "type": "expression"
+      },
+      {
+        "column_id": "household_case_id",
+        "datatype": "string",
+        "display_name": null,
+        "expression": {
+          "type": "icds_parent_id"
+        },
+        "is_nullable": true,
+        "is_primary_key": false,
+        "transform": {},
+        "type": "expression"
+      },
+      {
+        "column_id": "state_id",
+        "datatype": "string",
+        "display_name": null,
+        "expression": {
+          "type": "nested",
+          "argument_expression": {
+            "type": "ancestor_location",
+            "location_id": {
+              "expression": {
+                "property_name": "owner_id",
+                "type": "property_name"
+              },
+              "type": "root_doc"
+            },
+            "location_type": {
+              "type": "constant",
+              "constant": "state"
+            }
+          },
+          "value_expression": {
+            "type": "property_name",
+            "property_name": "_id"
+          }
+        },
+        "is_nullable": true,
+        "is_primary_key": false,
+        "transform": {},
+        "type": "expression"
+      },
+      {
+        "column_id": "district_id",
+        "datatype": "string",
+        "display_name": null,
+        "expression": {
+          "type": "nested",
+          "argument_expression": {
+            "type": "ancestor_location",
+            "location_id": {
+              "expression": {
+                "property_name": "owner_id",
+                "type": "property_name"
+              },
+              "type": "root_doc"
+            },
+            "location_type": {
+              "type": "constant",
+              "constant": "district"
+            }
+          },
+          "value_expression": {
+            "type": "property_name",
+            "property_name": "_id"
+          }
+        },
+        "is_nullable": true,
+        "is_primary_key": false,
+        "transform": {},
+        "type": "expression"
+      },
+      {
+        "column_id": "block_id",
+        "datatype": "string",
+        "display_name": null,
+        "expression": {
+          "type": "nested",
+          "argument_expression": {
+            "type": "ancestor_location",
+            "location_id": {
+              "expression": {
+                "property_name": "owner_id",
+                "type": "property_name"
+              },
+              "type": "root_doc"
+            },
+            "location_type": {
+              "type": "constant",
+              "constant": "block"
+            }
+          },
+          "value_expression": {
+            "type": "property_name",
+            "property_name": "_id"
+          }
+        },
+        "is_nullable": true,
+        "is_primary_key": false,
+        "transform": {},
+        "type": "expression"
+      },
+      {
+        "column_id": "supervisor_id",
+        "create_index": true,
+        "datatype": "string",
+        "display_name": null,
+        "expression": {
+          "type": "nested",
+          "argument_expression": {
+            "type": "ancestor_location",
+            "location_id": {
+              "expression": {
+                "property_name": "owner_id",
+                "type": "property_name"
+              },
+              "type": "root_doc"
+            },
+            "location_type": {
+              "type": "constant",
+              "constant": "supervisor"
+            }
+          },
+          "value_expression": {
+            "type": "property_name",
+            "property_name": "_id"
+          }
+        },
+        "is_nullable": true,
+        "is_primary_key": false,
+        "transform": {},
+        "type": "expression"
+      },
+      {
+        "column_id": "awc_id",
+        "create_index": true,
+        "datatype": "string",
+        "display_name": null,
+        "expression": {
+          "expression": {
+            "datatype": null,
+            "property_name": "owner_id",
+            "type": "property_name"
+          },
+          "type": "root_doc"
+        },
+        "is_nullable": false,
+        "is_primary_key": false,
+        "transform": {},
+        "type": "expression"
+      },
+      {
+        "column_id": "age_in_months",
+        "datatype": "integer",
+        "display_name": null,
+        "expression": {
+          "type": "named",
+          "name": "age_in_months_month_end"
+        },
+        "is_nullable": true,
+        "is_primary_key": false,
+        "transform": {},
+        "type": "expression"
+      },
+      {
+        "column_id": "age_in_years",
+        "datatype": "integer",
+        "display_name": null,
+        "expression": {
+          "type": "named",
+          "name": "age_in_years_month_end"
+        },
+        "is_nullable": true,
+        "is_primary_key": false,
+        "transform": {},
+        "type": "expression"
+      },
+      {
+        "column_id": "sex",
+        "datatype": "string",
+        "display_name": null,
+        "expression": {
+          "expression": {
+            "datatype": null,
+            "type": "property_name",
+            "property_name": "sex"
+          },
+          "type": "root_doc"
+        },
+        "is_nullable": true,
+        "is_primary_key": false,
+        "transform": {},
+        "type": "expression"
+      },
+      {
+        "column_id": "disabled",
+        "datatype": "string",
+        "display_name": null,
+        "expression": {
+          "name": "disabled",
+          "type": "named"
+        },
+        "is_nullable": true,
+        "is_primary_key": false,
+        "transform": {},
+        "type": "expression"
+      },
+      {
+        "column_id": "caste",
+        "datatype": "string",
+        "display_name": null,
+        "expression": {
+          "name": "caste",
+          "type": "named"
+        },
+        "is_nullable": true,
+        "is_primary_key": false,
+        "transform": {},
+        "type": "expression"
+      },
+      {
+        "column_id": "minority",
+        "datatype": "string",
+        "display_name": null,
+        "expression": {
+          "name": "minority",
+          "type": "named"
+        },
+        "is_nullable": true,
+        "is_primary_key": false,
+        "transform": {},
+        "type": "expression"
+      },
+      {
+        "column_id": "resident",
+        "datatype": "string",
+        "display_name": null,
+        "expression": {
+          "name": "resident",
+          "type": "named"
+        },
+        "is_nullable": true,
+        "is_primary_key": false,
+        "transform": {},
+        "type": "expression"
+      },
+      {
+        "column_id": "open_in_month",
+        "display_name": null,
+        "filter": {
+          "type": "boolean_expression",
+          "operator": "eq",
+          "property_value": "yes",
+          "expression": {
+            "type": "named",
+            "name": "open_in_month"
+          }
+        },
+        "type": "boolean"
+      },
+      {
+        "column_id": "alive_in_month",
+        "display_name": null,
+        "filter": {
+          "type": "boolean_expression",
+          "operator": "eq",
+          "property_value": "yes",
+          "expression": {
+            "type": "named",
+            "name": "alive_in_month"
+          }
+        },
+        "type": "boolean"
+      },
+      {
+        "column_id": "valid_in_month",
+        "display_name": null,
+        "filter": {
+          "type": "boolean_expression",
+          "operator": "eq",
+          "property_value": "yes",
+          "expression": {
+            "type": "named",
+            "name": "valid_in_month"
+          }
+        },
+        "type": "boolean"
+      },
+      {
+        "column_id": "valid_all_registered_in_month",
+        "display_name": null,
+        "filter": {
+          "type": "boolean_expression",
+          "operator": "eq",
+          "property_value": "yes",
+          "expression": {
+            "type": "named",
+            "name": "valid_all_registered_in_month"
+          }
+        },
+        "type": "boolean"
+      },
+      {
+        "column_id": "has_aadhar_id",
+        "type": "boolean",
+        "filter": {
+          "type": "boolean_expression",
+          "operator": "eq",
+          "property_value": "yes",
+          "expression": {
+            "type": "icds_get_last_case_property_update",
+            "case_id_expression": {
+              "type": "icds_parent_id"
+            },
+            "case_property": "has_aadhar",
+            "end_date": {
+              "type": "icds_month_end"
+            },
+            "xmlns": [
+              "http://openrosa.org/formdesigner/1D568275-1D19-46DB-8C54-2C9765DF6335",
+              "http://openrosa.org/formdesigner/756ec44475658f3f463f8012632def2bc9fbe731",
+              "http://openrosa.org/formdesigner/991c712a8588b52505d50a6f2262ca962a85e21c"
+            ]
+          }
+        },
+        "comment": "Filter history on add household, add member and edit member"
+      }
+    ],
+    "named_expressions": {
+      "age_in_years_month_end": {
+        "type": "evaluator",
+        "statement": "age_in_days / 365.25",
+        "context_variables": {
+          "age_in_days": {
+            "type": "diff_days",
+            "from_date_expression": {
+              "type": "root_doc",
+              "expression": {
+                "datatype": "date",
+                "property_name": "dob",
+                "type": "property_name"
+              }
+            },
+            "to_date_expression": {
+              "type": "icds_month_end"
+            }
+          }
+        }
+      },
+      "age_in_months_month_end": {
+        "type": "evaluator",
+        "statement": "age_in_days / 30.4",
+        "context_variables": {
+          "age_in_days": {
+            "type": "diff_days",
+            "from_date_expression": {
+              "type": "root_doc",
+              "expression": {
+                "datatype": "date",
+                "property_name": "dob",
+                "type": "property_name"
+              }
+            },
+            "to_date_expression": {
+              "type": "icds_month_end"
+            }
+          }
+        }
+      },
+      "age_in_months_month_start": {
+        "type": "evaluator",
+        "statement": "age_in_days / 30.4",
+        "context_variables": {
+          "age_in_days": {
+            "type": "diff_days",
+            "from_date_expression": {
+              "type": "root_doc",
+              "expression": {
+                "datatype": "date",
+                "property_name": "dob",
+                "type": "property_name"
+              }
+            },
+            "to_date_expression": {
+              "type": "icds_month_start"
+            }
+          }
+        }
+      },
+      "caste": {
+        "value_expression": {
+          "datatype": null,
+          "type": "property_name",
+          "property_name": "hh_caste"
+        },
+        "type": "related_doc",
+        "related_doc_type": "CommCareCase",
+        "doc_id_expression": {
+          "type": "icds_parent_id"
+        }
+      },
+      "disabled": {
+        "expression": {
+          "datatype": null,
+          "type": "property_name",
+          "property_name": "disabled"
+        },
+        "type": "root_doc"
+      },
+      "minority": {
+        "value_expression": {
+          "datatype": null,
+          "type": "property_name",
+          "property_name": "hh_minority"
+        },
+        "type": "related_doc",
+        "related_doc_type": "CommCareCase",
+        "doc_id_expression": {
+          "type": "icds_parent_id"
+        }
+      },
+      "resident": {
+        "expression": {
+          "datatype": null,
+          "type": "property_name",
+          "property_name": "resident"
+        },
+        "type": "root_doc"
+      },
+      "seeking_services": {
+        "type": "conditional",
+        "test": {
+          "type": "not",
+          "filter": {
+            "operator": "eq",
+            "type": "boolean_expression",
+            "expression": {
+              "type": "root_doc",
+              "expression": {
+                "property_name": "registered_status",
+                "type": "property_name"
+              }
+            },
+            "property_value": "not_registered"
+          }
+        },
+        "expression_if_true": {
+          "type": "constant",
+          "constant": "yes"
+        },
+        "expression_if_false": {
+          "type": "constant",
+          "constant": "no"
+        }
+      },
+      "open_in_month": {
+        "type": "conditional",
+        "test": {
+          "type": "and",
+          "filters": [
+            {
+              "type": "boolean_expression",
+              "operator": "gte",
+              "expression": {
+                "type": "diff_days",
+                "from_date_expression": {
+                  "expression": {
+                    "datatype": "date",
+                    "type": "property_name",
+                    "property_name": "opened_on"
+                  },
+                  "type": "root_doc"
+                },
+                "to_date_expression": {
+                  "type": "icds_month_end"
+                }
+              },
+              "property_value": 0
+            },
+            {
+              "type": "or",
+              "filters": [
+                {
+                  "type": "boolean_expression",
+                  "operator": "eq",
+                  "expression": {
+                    "expression": {
+                      "datatype": "string",
+                      "type": "property_name",
+                      "property_name": "closed"
+                    },
+                    "type": "root_doc"
+                  },
+                  "property_value": "False"
+                },
+                {
+                  "type": "boolean_expression",
+                  "operator": "gte",
+                  "expression": {
+                    "type": "diff_days",
+                    "from_date_expression": {
+                      "type": "icds_month_start"
+                    },
+                    "to_date_expression": {
+                      "expression": {
+                        "datatype": "date",
+                        "type": "property_name",
+                        "property_name": "closed_on"
+                      },
+                      "type": "root_doc"
+                    }
+                  },
+                  "property_value": 0
+                }
+              ]
+            }
+          ]
+        },
+        "expression_if_true": {
+          "type": "constant",
+          "constant": "yes"
+        },
+        "expression_if_false": {
+          "type": "constant",
+          "constant": "no"
+        }
+      },
+      "alive_in_month": {
+        "type": "conditional",
+        "test": {
+          "type": "or",
+          "filters": [
+            {
+              "operator": "in",
+              "expression": {
+                "expression": {
+                  "datatype": "date",
+                  "type": "property_name",
+                  "property_name": "date_death"
+                },
+                "type": "root_doc"
+              },
+              "type": "boolean_expression",
+              "property_value": [
+                "",
+                null
+              ]
+            },
+            {
+              "operator": "gte",
+              "expression": {
+                "from_date_expression": {
+                  "type": "icds_month_start"
+                },
+                "type": "diff_days",
+                "to_date_expression": {
+                  "expression": {
+                    "datatype": "date",
+                    "type": "property_name",
+                    "property_name": "date_death"
+                  },
+                  "type": "root_doc"
+                }
+              },
+              "type": "boolean_expression",
+              "property_value": 0
+            }
+          ]
+        },
+        "expression_if_true": {
+          "type": "constant",
+          "constant": "yes"
+        },
+        "expression_if_false": {
+          "type": "constant",
+          "constant": "no"
+        }
+      },
+      "valid_in_month": {
+        "type": "conditional",
+        "test": {
+          "type": "and",
+          "filters": [
+            {
+              "type": "boolean_expression",
+              "operator": "eq",
+              "property_value": "yes",
+              "expression": {
+                "type": "named",
+                "name": "open_in_month"
+              }
+            },
+            {
+              "type": "boolean_expression",
+              "operator": "eq",
+              "property_value": "yes",
+              "expression": {
+                "type": "named",
+                "name": "alive_in_month"
+              }
+            },
+            {
+              "type": "boolean_expression",
+              "operator": "eq",
+              "property_value": "yes",
+              "expression": {
+                "type": "named",
+                "name": "seeking_services"
+              }
+            }
+          ]
+        },
+        "expression_if_true": {
+          "type": "constant",
+          "constant": "yes"
+        },
+        "expression_if_false": {
+          "type": "constant",
+          "constant": "no"
+        }
+      },
+      "valid_all_registered_in_month": {
+        "comment": "this includes all beneficiaries who are valid, whether they are seeking services or not",
+        "type": "conditional",
+        "test": {
+          "type": "and",
+          "filters": [
+            {
+              "type": "boolean_expression",
+              "operator": "eq",
+              "property_value": "yes",
+              "expression": {
+                "type": "named",
+                "name": "open_in_month"
+              }
+            },
+            {
+              "type": "boolean_expression",
+              "operator": "eq",
+              "property_value": "yes",
+              "expression": {
+                "type": "named",
+                "name": "alive_in_month"
+              }
+            }
+          ]
+        },
+        "expression_if_true": {
+          "type": "constant",
+          "constant": "yes"
+        },
+        "expression_if_false": {
+          "type": "constant",
+          "constant": "no"
+        }
+      }
+    },
+    "named_filters": {},
+    "asynchronous": true,
+    "engine_id": "icds-ucr",
+    "backend_id": "LABORATORY",
+    "es_index_settings": {
+      "number_of_shards": 5
+    }
+  }
+}
