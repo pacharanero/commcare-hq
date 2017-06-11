@@ -399,6 +399,202 @@
           }
         },
         "comment": "Filter history on add household, add member and edit member"
+      },
+      {
+        "column_id": "adolescent_girls_11_14",
+        "type": "boolean",
+        "filter": {
+          "type": "and",
+          "filters": [
+            {
+              "type": "boolean_expression",
+              "operator": "eq",
+              "property_value": "yes",
+              "expression": {
+                "type": "named",
+                "name": "valid_in_month"
+              }
+            },
+            {
+              "type": "boolean_expression",
+              "operator": "eq",
+              "property_value": "F",
+              "expression": {
+                "expression": {
+                  "datatype": null,
+                  "type": "property_name",
+                  "property_name": "sex"
+                },
+                "type": "root_doc"
+              }
+            },
+            {
+              "type": "boolean_expression",
+              "operator": "gt",
+              "property_value": 132,
+              "expression": {
+                "type": "named",
+                "name": "age_in_months_month_end"
+              }
+            },
+            {
+              "type": "boolean_expression",
+              "operator": "lte",
+              "property_value": 168,
+              "expression": {
+                "type": "named",
+                "name": "age_in_months_month_start"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "column_id": "adolescent_girls_15_18",
+        "type": "boolean",
+        "filter": {
+          "type": "and",
+          "filters": [
+            {
+              "type": "boolean_expression",
+              "operator": "eq",
+              "property_value": "yes",
+              "expression": {
+                "type": "named",
+                "name": "valid_in_month"
+              }
+            },
+            {
+              "type": "boolean_expression",
+              "operator": "eq",
+              "property_value": "F",
+              "expression": {
+                "expression": {
+                  "datatype": null,
+                  "type": "property_name",
+                  "property_name": "sex"
+                },
+                "type": "root_doc"
+              }
+            },
+            {
+              "type": "boolean_expression",
+              "operator": "gt",
+              "property_value": 168,
+              "expression": {
+                "type": "named",
+                "name": "age_in_months_month_end"
+              }
+            },
+            {
+              "type": "boolean_expression",
+              "operator": "lte",
+              "property_value": 216,
+              "expression": {
+                "type": "named",
+                "name": "age_in_months_month_start"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "column_id": "adolescent_girls_11_14_all",
+        "type": "boolean",
+        "filter": {
+          "type": "and",
+          "filters": [
+            {
+              "type": "boolean_expression",
+              "operator": "eq",
+              "property_value": "yes",
+              "expression": {
+                "type": "named",
+                "name": "valid_all_registered_in_month"
+              }
+            },
+            {
+              "type": "boolean_expression",
+              "operator": "eq",
+              "property_value": "F",
+              "expression": {
+                "expression": {
+                  "datatype": null,
+                  "type": "property_name",
+                  "property_name": "sex"
+                },
+                "type": "root_doc"
+              }
+            },
+            {
+              "type": "boolean_expression",
+              "operator": "gt",
+              "property_value": 132,
+              "expression": {
+                "type": "named",
+                "name": "age_in_months_month_end"
+              }
+            },
+            {
+              "type": "boolean_expression",
+              "operator": "lte",
+              "property_value": 168,
+              "expression": {
+                "type": "named",
+                "name": "age_in_months_month_start"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "column_id": "adolescent_girls_15_18_all",
+        "type": "boolean",
+        "filter": {
+          "type": "and",
+          "filters": [
+            {
+              "type": "boolean_expression",
+              "operator": "eq",
+              "property_value": "yes",
+              "expression": {
+                "type": "named",
+                "name": "valid_all_registered_in_month"
+              }
+            },
+            {
+              "type": "boolean_expression",
+              "operator": "eq",
+              "property_value": "F",
+              "expression": {
+                "expression": {
+                  "datatype": null,
+                  "type": "property_name",
+                  "property_name": "sex"
+                },
+                "type": "root_doc"
+              }
+            },
+            {
+              "type": "boolean_expression",
+              "operator": "gt",
+              "property_value": 168,
+              "expression": {
+                "type": "named",
+                "name": "age_in_months_month_end"
+              }
+            },
+            {
+              "type": "boolean_expression",
+              "operator": "lte",
+              "property_value": 216,
+              "expression": {
+                "type": "named",
+                "name": "age_in_months_month_start"
+              }
+            }
+          ]
+        }
       }
     ],
     "named_expressions": {
