@@ -21,7 +21,7 @@
  {% endblock %}
  
  {% block breadcrumbs %}
-@@ -26,291 +29,177 @@
+@@ -26,291 +29,182 @@
  {% endblock %}
  
  {% block page_navigation %}
@@ -54,7 +54,7 @@
 +          <h2 class="appnav-name">
 +            <a href="{% url "view_app" domain app.id %}"
 +               class="appnav-responsive">
-+                <span class="variable-app_name">{{ app.name }}</span>
++                <span class="variable-app_name appname-text">{{ app.name }}</span>
              </a>
 -        </li>
 -
@@ -314,6 +314,11 @@
 -</nav>
 -{% endif %}
 +          </h2>
++          <div id="js-publish-status"
++               class="appnav-name-publish"
++               style="display: none;">
++            {% trans "Updates Available to Publish" %}
++          </div>
 +      </div>
 +
 +      {% if app.get_doc_type == 'Application' %}

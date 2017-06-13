@@ -15,7 +15,7 @@
      {% include 'hqmedia/partials/multimedia_js.html' %}
      <script src="{% static 'app_manager/js/nav_menu_media_common.js' %}"></script>
      <script src="{% static 'app_manager/js/app_manager_media.js' %}"></script>
-@@ -68,6 +68,39 @@
+@@ -68,6 +68,42 @@
      {% if request|toggle_enabled:"CUSTOM_INSTANCES"%}
          <script src="{% static 'app_manager/js/custom_instances.js' %}"></script>
      {% endif %}
@@ -25,6 +25,9 @@
 +    {% if can_preview_form %}
 +    <div class="appmanager-page-actions">
 +        {% include 'app_manager/v2/partials/app_preview_toggle.html' %}
++        <a class="btn btn-primary" href="{% url "form_source" domain app.id module.id form.id %}">
++          <i class="fa fa-pencil"></i> {% trans "Edit Form" %}
++        </a>
 +    </div>
 +    {% endif %}
 +
@@ -55,7 +58,7 @@
  {% endblock %}
  
  {% block form-view %}
-@@ -104,81 +137,21 @@
+@@ -104,81 +140,21 @@
      {% initial_page_data 'uses_form_workflow' uses_form_workflow %}
      {% registerurl "get_form_datums" domain app.id %}
  
@@ -146,7 +149,7 @@
              {% if form.form_type == 'module_form' %}{% if allow_usercase or form.uses_usercase %}
              <li>
                  <a id="usercase-configuration-tab" href="#usercase-configuration" data-toggle="tab">
-@@ -186,35 +159,36 @@
+@@ -186,35 +162,36 @@
                  </a>
              </li>
              {% endif %}{% endif %}
@@ -200,7 +203,7 @@
                      <div class="alert alert-warning">
                          {% trans "You are viewing a shadow form, therefore:" %}
                          <ul>
-@@ -226,77 +200,72 @@
+@@ -226,77 +203,72 @@
                              <li>{% trans 'You are not allowed to specify case closures here'%}</li>
                          </ul>
                      </div>
@@ -328,7 +331,7 @@
                          {% endblock %}
                      </div>
                  {% else %}
-@@ -305,14 +274,15 @@
+@@ -305,14 +277,15 @@
                      </p>
                  {% endif %}
              </div>
@@ -346,7 +349,7 @@
              {% endif %}
          </div>
      </div>
-@@ -320,12 +290,13 @@
+@@ -320,12 +293,13 @@
  {% endblock %}
  
  {% block modals %}{{ block.super }}
