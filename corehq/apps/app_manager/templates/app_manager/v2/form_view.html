@@ -74,6 +74,9 @@
     {% if can_preview_form %}
     <div class="appmanager-page-actions">
         {% include 'app_manager/v2/partials/app_preview_toggle.html' %}
+        <a class="btn btn-primary" href="{% url "form_source" domain app.id module.id form.id %}">
+          <i class="fa fa-pencil"></i> {% trans "Edit Form" %}
+        </a>
     </div>
     {% endif %}
 
