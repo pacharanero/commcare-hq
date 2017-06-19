@@ -28,7 +28,7 @@
      <script src="{% static 'app_manager/js/form_designer.js' %}"></script>
  {% endblock %}
  
-@@ -32,12 +42,114 @@
+@@ -32,12 +42,108 @@
      {% initial_page_data 'CKEDITOR_BASEPATH' CKEDITOR_BASEPATH|static %}
      {% initial_page_data 'days_since_created' request.couch_user.days_since_created %}
      {% initial_page_data 'guided_tour' request.guided_tour %}
@@ -44,12 +44,6 @@
 -    <div id="formdesigner" class="clearfix"></div>
 +    {% registerurl 'edit_form_attr' app.domain app.id form.unique_id '---' %}
 +    <div id="formdesigner" class="clearfix app-manager-v2 loading"></div>
-+
-+    {% if can_preview_form %}
-+    <script type="text/html" id="js-fd-app-preview-btn-template">
-+        {% include 'app_manager/v2/partials/app_preview_toggle.html' %}
-+    </script>
-+    {% endif %}
 +
 +    <script type="text/html" id="js-fd-manage-case">
 +      <div class="btn-group pull-right">
