@@ -1,0 +1,5 @@
+version: '3'
+
+# only here to provide a blank docker-compose file 
+# it will ensure Docker Compose is automatically installed
+# by the Vagrant provisioner
